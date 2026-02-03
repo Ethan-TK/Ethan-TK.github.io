@@ -109,7 +109,7 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
             scene.add(ambientLight);
             
             const sunLight = new THREE.DirectionalLight(0xfff4e6, 1.2);
@@ -124,6 +124,8 @@
             sunLight.shadow.mapSize.width = 2048;
             sunLight.shadow.mapSize.height = 2048;
             sunLight.shadow.bias = -0.0001;
+            sunLight.shadow.normalBias = 0.02;
+            sunLight.shadow.radius = 2;
             scene.add(sunLight);
             
             const skyLight = new THREE.HemisphereLight(0x87CEEB, 0x6b9d3a, 0.5);
@@ -156,6 +158,7 @@
                 const distance = Math.random() * 8;
                 blade.position.set(Math.cos(angle) * distance, 0.1, Math.sin(angle) * distance);
                 blade.rotation.z = (Math.random() - 0.5) * 0.4;
+                blade.receiveShadow = true;
                 scene.add(blade);
             }
             
