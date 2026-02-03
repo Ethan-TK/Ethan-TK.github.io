@@ -93,6 +93,36 @@
         let normalMapTexture = null;
         const NORMAL_MAP_SCALE = 20.0; // Set to 20 for strong normal map effect
         
+        function createGrassTexture() {
+            const size = 256;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#5a8c2f');
+            gradient.addColorStop(1, '#7bb44a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            for (let i = 0; i < 3500; i++) {
+                const x = Math.random() * size;
+                const y = Math.random() * size;
+                const lightness = 40 + Math.random() * 30;
+                const saturation = 40 + Math.random() * 20;
+                ctx.fillStyle = `hsl(100, ${saturation}%, ${lightness}%)`;
+                ctx.fillRect(x, y, 1.5, 1.5);
+            }
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(6, 6);
+            return texture;
+        }
+
         function init() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x87CEEB);
