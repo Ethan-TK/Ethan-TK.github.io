@@ -165,12 +165,10 @@
             rimLight.position.set(-5, 3, -5);
             scene.add(rimLight);
             
-            const grassTexture = createGrassTexture();
             const groundGeometry = new THREE.CircleGeometry(20, 64);
             const groundMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xffffff,
-                map: grassTexture,
-                roughness: 0.9,
+                color: 0x6b9d3a,
+                roughness: 0.8,
                 metalness: 0.0
             });
             const ground = new THREE.Mesh(groundGeometry, groundMaterial);
