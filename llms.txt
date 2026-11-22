@@ -1,0 +1,18 @@
+# Agentic Readiness Score
+
+> The Agentic Readiness Score, published by The Optimisers, measures how ready a business is for AI agents: whether AI assistants such as ChatGPT and Google's AI find, describe and recommend it when customers ask.
+
+Agentic readiness: Agentic readiness is how prepared a business is for AI agents: assistants such as ChatGPT, Gemini and Perplexity that research, recommend and increasingly act on a customer’s behalf. A business with high agentic readiness can be reached by AI crawlers, is described accurately, is named when customers ask for a recommendation, publishes machine-readable data, and can take an enquiry or order through an agent.
+
+## Key pages
+- [What is agentic readiness?](https://agenticreadiness.ai/what-is-agentic-readiness/): definition, the five parts, comparison with SEO and GEO
+- [Methodology](https://agenticreadiness.ai/methodology/): 19 questions, 5 runs each, web search on and off, weighting, bands, limitations
+- [The Agentic Readiness Index](https://agenticreadiness.ai/agentic-readiness-index/): market benchmark and how to cite it
+- [Enterprise](https://agenticreadiness.ai/enterprise/): portfolio and competitor ratings
+- [Media](https://agenticreadiness.ai/media/): fact sheet, citation guidance, logos, contact
+
+## Facts
+- Scale: 0 to 100; bands Invisible (0-19), Low visibility (20-39), Emerging (40-59), Visible (60-79), Leading (80-100)
+- Parts: technical access, content clarity, brand command, structured data, transaction readiness
+- Confidence ratio: mention rate with web search divided by mention rate without it
+- Method version 1.0, November 2026
