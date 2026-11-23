@@ -142,10 +142,11 @@
   function analyse(origin, home, robotsRes, llmsRes, sitemapRes){
     var doc = new DOMParser().parseFromString(home.text, "text/html");
     var finalUrl = home.url || origin;
-    var P = { p1:[], p2:[], p4:[], p5:[] };
+    var P = { p1:[], p2:[], p4:[], p5:[] }, BLOCK = [];
 
     /* P1 Technical Access */
     var https = /^https:/i.test(finalUrl);
+    if (!https) BLOCK.push({ cap: 40, title: "The site isn’t served over HTTPS", why: "Many crawlers and agents skip or distrust sites that load over plain HTTP." });
     P.p1.push(check("Secure connection (HTTPS)", https ? "pass" : "fail",
       https ? "The site loads over HTTPS." : "The site loads over plain HTTP.",
       "Serve every page over HTTPS. Many crawlers and agents treat insecure sites as lower quality.", 15));
@@ -167,10 +168,17 @@
         ? "Search and user-request crawlers decide whether assistants can cite you today. Unblock them unless you have a specific reason not to."
         : "Blocking training crawlers is a legitimate choice, but it reduces how well models know you over time.", 45));
     P.p1.botRows = botRows;
+    var searchBots = botRows.filter(function(b){ return b.w === 2; });
+    var allSearchBlocked = searchBots.every(function(b){ return !b.allowed; });
+    var everyBotBlocked = botRows.every(function(b){ return !b.allowed; });
+    if (everyBotBlocked) BLOCK.push({ cap: 15, title: "robots.txt blocks every AI crawler", why: "Every AI crawler we check is turned away, so assistants can’t read, cite or recommend the site at all." });
+    else if (allSearchBlocked) BLOCK.push({ cap: 20, title: "Every AI search crawler is blocked", why: "ChatGPT search, ChatGPT user requests, Perplexity and Bing are all blocked, so assistants can’t fetch the site to answer questions about it." });
+    else if (searchBlocked.length >= 2) BLOCK.push({ cap: 40, title: "Several AI search crawlers are blocked", why: searchBlocked.map(function(b){ return b.ua; }).join(", ") + " can’t reach the site, which removes it from those assistants’ answers." });
 
     var robotsMeta = (doc.querySelector('meta[name="robots"]') || {}).content || "";
     var headerRobots = home.robotsHeader || "";
     var noindex = /noindex|none/i.test(robotsMeta + " " + headerRobots);
+    if (noindex) BLOCK.push({ cap: 30, title: "The home page tells crawlers not to index it", why: "A noindex instruction (" + (robotsMeta || headerRobots).trim() + ") asks search engines and AI crawlers to leave the page out." });
     P.p1.push(check("Indexing allowed", noindex ? "fail" : "pass",
       noindex ? "The home page asks crawlers not to index it (" + esc((robotsMeta || headerRobots).trim()) + ")." : "Nothing on the home page blocks indexing.",
       noindex ? "Remove noindex from pages you want AI assistants to find." : "", 15));
@@ -186,6 +194,8 @@
     body.querySelectorAll("script,style,noscript,template,svg,iframe").forEach(function(n){ n.remove(); });
     var text = (body.textContent || "").replace(/\s+/g, " ").trim(), wc = words(text);
     var appShell = !!doc.querySelector("#root:empty,#__next:empty,#app:empty,[data-reactroot]:empty");
+    if (wc < 30) BLOCK.push({ cap: 20, title: "The page has almost no text without JavaScript", why: (wc ? "Only " + wc + " words are" : "No words are") + " in the HTML. Most AI crawlers don’t run JavaScript, so to them the page is effectively blank." });
+    else if (wc < 80) BLOCK.push({ cap: 35, title: "Most of the page text needs JavaScript", why: "Only " + wc + " words are in the HTML. Most AI crawlers don’t run JavaScript, so they see very little of the page." });
     P.p2.push(check("Readable without JavaScript", wc >= 250 ? "pass" : wc >= 80 ? "part" : "fail",
       wc + " words of text are in the page’s HTML before any JavaScript runs." + (wc < 80 && appShell ? " The page looks like a JavaScript app shell." : ""),
       wc >= 250 ? "" : "Many AI crawlers don’t run JavaScript. Render your main content on the server so it’s in the HTML.", 30));
@@ -289,8 +299,12 @@
     var scores = { p1: pillarScore(P.p1), p2: pillarScore(P.p2), p4: pillarScore(P.p4), p5: pillarScore(P.p5) };
     var W = CFG.quickWeights || { p1: 30, p2: 25, p4: 25, p5: 20 };
     var wsum = W.p1 + W.p2 + W.p4 + W.p5;
-    var overall = Math.round((scores.p1 * W.p1 + scores.p2 * W.p2 + scores.p4 * W.p4 + scores.p5 * W.p5) / wsum);
-    return { url: finalUrl, origin: origin, checks: P, scores: scores, overall: overall, band: band(overall), when: new Date() };
+    var base = Math.round((scores.p1 * W.p1 + scores.p2 * W.p2 + scores.p4 * W.p4 + scores.p5 * W.p5) / wsum);
+    // A critical blocker caps the score: one of these makes a site close to invisible whatever else is right.
+    var cap = BLOCK.reduce(function(m, b){ return Math.min(m, b.cap); }, 100);
+    BLOCK.sort(function(a, b){ return a.cap - b.cap; });
+    var overall = Math.min(base, cap);
+    return { url: finalUrl, origin: origin, checks: P, scores: scores, base: base, blockers: BLOCK, capped: overall < base, overall: overall, band: band(overall), when: new Date() };
   }
 
   /* ---------------- UI ---------------- */
@@ -328,20 +342,25 @@
       }
       return '<section class="pillar-block" id="' + k + '" aria-labelledby="' + k + '-h"><div class="pb-head"><h2 id="' + k + '-h">' + k.toUpperCase() + " " + NAMES[k] + '</h2><span class="pscore">' + r.scores[k] + ' <span class="small">/ 100</span></span></div><ul class="checks">' + list + bots + "</ul></section>";
     }).join("");
-    out.innerHTML =
+    var crit = r.blockers.length ? '<div class="critical" role="alert"><h2>' + (r.blockers.length > 1 ? "Critical problems are holding this score down" : "A critical problem is holding this score down") + '</h2><ul>' +
+      r.blockers.map(function(b){ return "<li><strong>" + esc(b.title) + ".</strong> " + esc(b.why) + "</li>"; }).join("") + "</ul>" +
+      (r.capped ? "<p>The score is limited to " + Math.min.apply(null, r.blockers.map(function(b){ return b.cap; })) + ". Without these it would be " + r.base + ". Fix them first: nothing else on the site can help while assistants can’t read it.</p>" : "") + "</div>" : "";
+    out.innerHTML = crit +
       '<div class="summary"><div class="sum-score"><p class="small m0">Quick check for</p><p class="site mt-xxs">' + esc(host) + '</p>' +
       '<p class="big">' + r.overall + ' <small>/ 100</small></p><p class="bandname m0">' + r.band + '</p>' +
       '<div class="pointer-ramp"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin"></span></div>' +
       '<div class="ramp-labels" aria-hidden="true"><span>0</span><span></span><span></span><span></span><span>100</span></div>' +
       '<p class="small mt-1 mb0">Weighted combination of the four pillars we can check automatically; Technical Access counts most. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
       '<div class="sum-pillars">' + pins + "</div></div>" +
-      '<div class="report-actions"><button class="btn secondary" type="button" id="copy-sum">Copy summary</button><button class="btn secondary" type="button" onclick="window.print()">Print or save as PDF</button><a class="btn ghost" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
+      '<div class="report-actions"><button class="btn secondary" type="button" id="copy-sum">Copy summary</button><button class="btn secondary" type="button" id="print-rep">Print or save as PDF</button><a class="btn ghost" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       '<div class="bc-block"><div><h2>P3 Brand Command needs the full test</h2><p>Whether ChatGPT, Gemini and Perplexity actually name you can’t be read from your website. The full rating asks AI assistants 19 customer questions, five times each, with web search on and off.</p></div><a class="btn" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       blocks;
     Array.prototype.forEach.call(out.querySelectorAll("[data-w]"), function(i){ i.style.width = i.getAttribute("data-w") + "%"; });
     requestAnimationFrame(function(){ var pin = out.querySelector(".pin"); if (pin) pin.style.left = Math.max(1, Math.min(99, r.overall)) + "%"; });
+    document.getElementById("print-rep").addEventListener("click", function(){ window.print(); });
     document.getElementById("copy-sum").addEventListener("click", function(e){
       var lines = ["Agentic Readiness quick check: " + host, "Score " + r.overall + "/100 (" + r.band + ")"];
+      r.blockers.forEach(function(b){ lines.push("Critical: " + b.title); });
       ["p1","p2","p4","p5"].forEach(function(k){ lines.push(NAMES[k] + ": " + r.scores[k]); });
       lines.push("Brand Command: needs the full AI test", location.href);
       var b = e.currentTarget;

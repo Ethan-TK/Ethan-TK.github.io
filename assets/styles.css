@@ -608,3 +608,9 @@ figure.product{margin-bottom:0}
 .pr-pillars li:nth-child(1){--i:0}.pr-pillars li:nth-child(2){--i:1}.pr-pillars li:nth-child(4){--i:2}.pr-pillars li:nth-child(5){--i:3}
 .toc p.mt-15{margin-top:1.5rem}
 .hero .actions{margin-top:2rem}.hero .check-note{margin-top:1.1rem}.site-head .btn.ghost{font-weight:500;color:var(--ink-2)}
+
+.critical{background:var(--fail-bg);border-radius:var(--radius);padding:clamp(1.1rem,2.6vw,1.6rem) clamp(1.2rem,3vw,1.8rem);color:var(--ink)}
+.critical h2{font-size:1.2rem;color:var(--fail);margin:0 0 .6rem}
+.critical ul{margin:0 0 .8rem;padding-left:1.2rem}
+.critical li + li{margin-top:.4rem}
+.critical p{margin:0;color:var(--ink-2)}
