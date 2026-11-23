@@ -1,10 +1,7 @@
 /* ============================================================
    SETTINGS – change before going live
    ============================================================ */
-var CONFIG = {
-  contactEmail: "hello@agenticreadiness.ai",     // rating requests and enterprise enquiries (placeholder)
-  mediaEmail:   "media@agenticreadiness.ai"      // press enquiries (placeholder)
-};
+var CONFIG = window.ARS_CONFIG || { contactEmail:"hello@agenticreadiness.ai", mediaEmail:"media@agenticreadiness.ai" };
 
 (function(){
   var root = document.documentElement;
@@ -25,26 +22,6 @@ var CONFIG = {
       mb.setAttribute("aria-expanded", open ? "true" : "false");
     });
     document.addEventListener("keydown", function(e){ if (e.key === "Escape" && nav.classList.contains("open")){ nav.classList.remove("open"); mb.setAttribute("aria-expanded","false"); mb.focus(); } });
-  }
-
-  /* hero: start the request with the website filled in */
-  var qf = $("#quick-form");
-  if (qf){
-    var qi = $("#q-site"), qh = $("#q-hint");
-    qf.addEventListener("submit", function(e){
-      e.preventDefault();
-      var v = qi.value.trim().replace(/^https?:\/\//i, "").replace(/\/$/, "");
-      qh.className = "hint";
-      if (!/^[^\s.]+(\.[^\s.]+)+/.test(v)){
-        qh.textContent = "Enter a website address, like " + SITE + ".";
-        qh.classList.add("err"); qi.setAttribute("aria-invalid","true"); qi.focus(); return;
-      }
-      qi.removeAttribute("aria-invalid");
-      $("#f-site").value = v;
-      qh.textContent = "Got it. Add your details below to send the request.";
-      $("#request").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-      setTimeout(function(){ $("#f-name").focus({ preventScroll: true }); }, 450);
-    });
   }
 
   /* five answers to one question (sample data) */
@@ -94,7 +71,7 @@ var CONFIG = {
     var STAGES = [
       { name:"Discovery", hint:"“Where do I start?”", n:6, on:.5, off:.17 },
       { name:"Evaluation", hint:"“Tell me about…”", n:7, on:.94, off:.66 },
-      { name:"Choosing", hint:"“Who’s best for…”", n:6, on:.6, off:.2 }
+      { name:"Transaction", hint:"“Best [service] in [place]”", n:6, on:.6, off:.2 }
     ];
     var stagesEl = $("#stages"), seed = 20261019, mode = "on", res = {};
     var rng = function(s){ return function(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; };
@@ -147,34 +124,6 @@ var CONFIG = {
     el.innerHTML = out;
   });
 
-  /* pillars: emphasis by business type (qualitative only) */
-  var pl = $("#pillars-list");
-  if (pl){
-    var P = {
-      general:      { p1:"e", p2:"e", p3:"e", p4:"e", p5:"e", note:"No business type chosen, so every part counts equally." },
-      ecommerce:    { p1:1, p2:1, p3:1, p4:3, p5:3, note:"AI can only recommend products it can read and buy. Structured data and transaction readiness count most." },
-      professional: { p1:1, p2:2, p3:3, p4:1, p5:1, note:"Nobody buys legal or financial advice through a chatbot, but they do ask it who to trust. Brand command counts most." },
-      local:        { p1:1, p2:1, p3:3, p4:2, p5:1, note:"Local businesses win on reputation and accurate details: brand command first, then consistent location data." },
-      saas:         { p1:2, p2:3, p3:2, p4:2, p5:1, note:"Software buyers ask AI to explain and compare products, so clear, quotable content counts most." },
-      media:        { p1:1, p2:3, p3:2, p4:1, p5:1, note:"For publishers, being quoted and cited accurately is everything. Content clarity counts most." }
-    };
-    var L = { e:"Equal", 1:"Standard", 2:"Higher", 3:"Highest" };
-    var apply = function(type){
-      var p = P[type];
-      $$(".pillar", pl).forEach(function(li){
-        var lvl = p[li.dataset.p]; li.dataset.lvl = lvl;
-        $(".wt > span:last-child", li).textContent = L[lvl] + " weight";
-      });
-      $("#type-note").textContent = p.note;
-    };
-    var pb = $$(".types button");
-    pb.forEach(function(b){ b.addEventListener("click", function(){
-      pb.forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      apply(b.dataset.type);
-    }); });
-    apply("general");
-  }
-
   /* forms: open the visitor's email app with the details filled in (no server needed) */
   function wireForm(id, subject, required, to){
     var f = document.getElementById(id); if (!f) return;
@@ -195,6 +144,7 @@ var CONFIG = {
       msg.textContent = "Your email app should open with your message ready to send.";
     });
   }
+  var gw = new URLSearchParams(location.search).get("website"); if (gw && document.getElementById("f-site")) document.getElementById("f-site").value = gw;
   wireForm("score-form", "Rating request", ["name","email","website"], "contactEmail");
   wireForm("enterprise-form", "Enterprise enquiry", ["name","email","company"], "contactEmail");
 

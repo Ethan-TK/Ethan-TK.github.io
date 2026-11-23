@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" data-site="yourbusiness.com" data-city="Auckland">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Agentic Readiness Score Works</title>
+<meta name="description" content="Repeat runs, web search on and off, the confidence ratio and business-type weighting: how agentic readiness is measured, with a live example.">
+<link rel="canonical" href="https://agenticreadiness.ai/how-it-works/">
+<link rel="alternate" hreflang="en" href="https://agenticreadiness.ai/how-it-works/">
+<link rel="alternate" hreflang="en-nz" href="https://agenticreadiness.co.nz/how-it-works/">
+<link rel="alternate" hreflang="en-au" href="https://agenticreadiness.com.au/how-it-works/">
+<link rel="alternate" hreflang="x-default" href="https://agenticreadiness.ai/how-it-works/">
+<meta property="og:site_name" content="Agentic Readiness">
+<meta property="og:title" content="How the Agentic Readiness Score Works">
+<meta property="og:description" content="Repeat runs, web search on and off, the confidence ratio and business-type weighting: how agentic readiness is measured, with a live example.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://agenticreadiness.ai/how-it-works/">
+<meta property="og:image" content="https://agenticreadiness.ai/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://agenticreadiness.ai/#org",
+   "name": "The Optimisers",
+   "url": "https://theoptimisers.co.nz",
+   "logo": "https://agenticreadiness.ai/assets/logo.svg",
+   "contactPoint": [
+    {
+     "@type": "ContactPoint",
+     "contactType": "media enquiries",
+     "email": "media@agenticreadiness.ai"
+    },
+    {
+     "@type": "ContactPoint",
+     "contactType": "sales",
+     "email": "hello@agenticreadiness.ai"
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://agenticreadiness.ai/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "How it works"
+    }
+   ]
+  },
+  {
+   "@type": "WebPage",
+   "name": "How the Agentic Readiness Score works",
+   "url": "https://agenticreadiness.ai/how-it-works/",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://agenticreadiness.ai/#org"
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+  <a class="brand" href="/"><svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true"><rect x="0" y="0" width="12" height="5" rx="1.5" fill="#1D6A33"/><rect x="0" y="7.5" width="17" height="5" rx="1.5" fill="#5DBB63"/><rect x="0" y="15" width="24" height="5" rx="1.5" fill="#F4C542"/></svg><span>Agentic Readiness</span></a>
+  <nav class="nav" id="site-nav" aria-label="Main"><a href="/how-it-works/" aria-current="page">How it works</a><a href="/pillars/">Pillars</a><a href="/agentic-readiness-index/">Index</a><a href="/methodology/">Methodology</a><a href="/enterprise/">Enterprise</a><a href="/media/">Media</a></nav>
+  <div class="head-actions">
+    <a class="btn ghost" href="/get-rated/">Get rated</a>
+    <a class="btn" href="/check/"><span class="long">Free check</span><span class="short">Check</span></a>
+    <button class="btn secondary menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</div></header>
+<main id="main">
+<div class="page-head"><div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">How it works</li></ol></nav><h1>How the Agentic Readiness Score works</h1><p class="lede">Two parts: an automatic check of your website, and a structured test of what AI assistants actually say about you. Here’s the second part, with a live example.</p></div></div>
+
+<section class="section"><div class="wrap">
+  <div class="section-head"><h2 class="h2">Ask an AI the same question five times</h2>
+  <p class="lede">You won’t get the same answer twice. Switch web search off to see what the assistant knows without looking anything up.</p></div>
+  <div class="ask" id="ask"><div><q>I’ve just started a business in Auckland. Which accountant should I use?</q><p class="small" style="margin:.4rem 0 0">Sample answers for a made-up firm, Harbourline Accounting.</p></div>
+    <div class="seg" role="group" aria-label="AI web search for the five answers"><button type="button" data-mode="on" aria-pressed="true">Web search on</button><button type="button" data-mode="off" aria-pressed="false">Web search off</button></div></div>
+  <div class="answers" id="answers" aria-live="polite"></div>
+  <div class="sumline"><b id="ans-count">Named in 3 of 5</b><span id="ans-note"></span></div>
+
+  <div class="matrix" id="full-test">
+    <div class="matrix-top"><div><h3 class="h3">The full test: 19 questions, 5 runs each</h3><p class="small" style="margin:.3rem 0 0;max-width:56ch">Questions follow a customer from discovery, to evaluating you, to the transaction. Each square is one answer; filled means the business was named.</p></div>
+      <div class="seg" role="group" aria-label="AI web search for the full test"><button type="button" data-mode="on" aria-pressed="true">Web search on</button><button type="button" data-mode="off" aria-pressed="false">Web search off</button></div></div>
+    <div class="stages" id="stages"></div>
+    <div class="msum" aria-live="polite">
+      <div><span>Named</span><b id="t-count">–</b><span id="t-mode">with web search</span></div>
+      <div><span>Mention probability</span><b id="t-prob">–</b><span>across 95 answers</span></div>
+      <div><span>Confidence ratio</span><b id="t-ratio">–</b><span id="t-note">web on ÷ web off</span></div>
+    </div>
+    <p class="mfoot"><span class="key"><i></i>Named, web search on <i class="m"></i>Named, from memory</span><span>Sample data for illustration. <button type="button" id="rerun">Run the test again</button></span></p>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="wrap split">
+  <div><h2 class="h2">The confidence ratio</h2></div>
+  <div class="prose">
+    <p>With web search on, an assistant can look you up in the moment. With it off, it relies on what it learned in training. A business named both ways is part of the assistant’s knowledge. A business named only with search is easy to lose.</p>
+    <p class="formula">Confidence ratio = mention rate with web search ÷ mention rate without</p>
+    <div class="table-wrap"><table class="t"><thead><tr><th scope="col">Ratio</th><th scope="col">What it means</th></tr></thead><tbody>
+      <tr><th scope="row">1.5 or below</th><td>Strong. Known from memory.</td></tr><tr><th scope="row">Above 1.5, up to 3</th><td>Moderate. Partly relies on search.</td></tr>
+      <tr><th scope="row">Above 3</th><td>Weak. Mainly found through search.</td></tr><tr><th scope="row">No mentions without search</th><td>Search-dependent. Invisible from memory.</td></tr></tbody></table></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap split">
+  <div><h2 class="h2">Weighted for the kind of business you run</h2></div>
+  <div class="prose">
+    <p>An online store needs great product data so AI can recommend its products. A law firm needs authority and trust. So the score uses a weighting profile for your type of business: e-commerce, professional services, local business, software and technology, media and publishing, or a general profile where all five pillars count equally.</p>
+    <ul><li><strong>E-commerce:</strong> Data Liquidity and Transaction Readiness count most.</li><li><strong>Professional services and local businesses:</strong> Brand Command counts most.</li>
+    <li><strong>Media and publishing:</strong> Content Extractability counts most.</li><li><strong>Software and technology:</strong> broadly balanced, with Content Extractability important.</li></ul>
+    <p>Businesses are compared with others on the same profile. <a href="/methodology/">Read the methodology</a>.</p>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="wrap split">
+  <div><h2 class="h2">Five bands, from Invisible to Leading</h2></div>
+  <div class="prose"><ul class="bandlist">
+    <li><span class="bandchip" style="background:var(--b5);color:#fff">Leading <small>80–100</small></span><span>A default recommendation in its category.</span></li>
+    <li><span class="bandchip" style="background:var(--b4)">Visible <small>60–79</small></span><span>Regularly named and described accurately.</span></li>
+    <li><span class="bandchip" style="background:var(--b3)">Emerging <small>40–59</small></span><span>Known, but often passed over.</span></li>
+    <li><span class="bandchip" style="background:var(--b2)">Low visibility <small>20–39</small></span><span>Occasionally named, rarely recommended.</span></li>
+    <li><span class="bandchip" style="background:var(--b1)">Invisible <small>0–19</small></span><span>AI assistants don’t know it exists.</span></li></ul></div>
+</div></section>
+
+<section class="section"><div class="wrap"><div class="cta-band"><div><h2 class="h2">Start with your website</h2><p>The free check covers four of the five pillars in about a minute.</p></div><a class="btn lg" href="/check/">Run free check</a><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></div></div></section>
+</main>
+<footer class="site-foot"><div class="wrap">
+  <div class="foot-grid">
+    <div class="foot-brand"><a class="brand" href="/" style="color:#fff"><svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true"><rect x="0" y="0" width="12" height="5" rx="1.5" fill="#1D6A33"/><rect x="0" y="7.5" width="17" height="5" rx="1.5" fill="#5DBB63"/><rect x="0" y="15" width="24" height="5" rx="1.5" fill="#F4C542"/></svg><span>Agentic Readiness</span></a>
+      <p>An independent measure of how AI assistants find, understand, recommend and transact with businesses. Published by The Optimisers.</p>
+      <div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div><h2>Product</h2><ul><li><a href="/check/">Free readiness check</a></li><li><a href="/get-rated/">Get the full rating</a></li><li><a href="/how-it-works/">How it works</a></li><li><a href="/pillars/">The five pillars</a></li><li><a href="/enterprise/">Enterprise</a></li></ul></div>
+    <div><h2>Research</h2><ul><li><a href="/what-is-agentic-readiness/">What is agentic readiness?</a></li><li><a href="/methodology/">Methodology</a></li><li><a href="/agentic-readiness-index/">The index</a></li><li><a href="/media/">Media</a></li></ul></div>
+    <div><h2>Regional sites</h2><ul><li><a href="https://agenticreadiness.ai/" hreflang="en">Global</a></li><li><a href="https://agenticreadiness.co.nz/" hreflang="en-nz">New Zealand</a></li><li><a href="https://agenticreadiness.com.au/" hreflang="en-au">Australia</a></li></ul></div>
+  </div>
+  <div class="foot-base"><span>© <span id="yr">2026</span> The Optimisers</span><span>Media: <a data-email="media" href="mailto:media@agenticreadiness.ai">media@agenticreadiness.ai</a></span></div>
+</div></footer>
+<script src="/assets/config.js"></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
