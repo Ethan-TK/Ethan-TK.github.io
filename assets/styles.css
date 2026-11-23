@@ -586,3 +586,25 @@ table.t thead th{background:var(--tint);font-size:.86rem;color:var(--ink-2)}
 figure.product{margin-inline:0}
 @media (max-width:600px){.facts-line{flex-direction:column;align-items:flex-start;gap:.3rem;justify-content:flex-start}}
 .prose{max-width:62ch}
+
+/* ---------- utilities (replace former inline styles) ---------- */
+.m0{margin:0}
+.mb0{margin-bottom:0}
+.mt-xxs{margin:.1rem 0 0}
+.mt-xs{margin:.4rem 0 0}
+.mt-s{margin-top:.6rem}
+.mt-1{margin-top:1rem}
+.mt-15{margin-top:1.5rem}
+.measure{max-width:56ch}
+.actions{margin-top:1.5rem;display:flex;gap:.6rem;flex-wrap:wrap}
+.pager{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.section.flush-top{padding-top:0}
+.bg-b1{background:var(--b1)}.bg-b2{background:var(--b2)}.bg-b3{background:var(--b3)}.bg-b4{background:var(--b4)}.bg-b5{background:var(--b5);color:#fff}
+.w-35{width:35%}.w-41{width:41%}.w-64{width:64%}.w-82{width:82%}
+.ramp-pin.at-56{--at:56%}
+figure.product{margin-bottom:0}
+.site-foot .brand{color:#fff}
+.toc a[aria-current="page"]{color:var(--ink);font-weight:650;border-left-color:var(--brand)}
+.pr-pillars li:nth-child(1){--i:0}.pr-pillars li:nth-child(2){--i:1}.pr-pillars li:nth-child(4){--i:2}.pr-pillars li:nth-child(5){--i:3}
+.toc p.mt-15{margin-top:1.5rem}
+.hero .actions{margin-top:2rem}.hero .check-note{margin-top:1.1rem}.site-head .btn.ghost{font-weight:500;color:var(--ink-2)}

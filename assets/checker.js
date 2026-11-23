@@ -306,7 +306,7 @@
     catch(e){ return null; }
   }
   function step(i, cls){ var li = progress.children[i]; if (li) li.className = cls; }
-  function meter(v){ return '<span class="meter" aria-hidden="true"><i style="width:' + (v == null ? 0 : v) + '%"></i></span>'; }
+  function meter(v){ return '<span class="meter" aria-hidden="true"><i data-w="' + (v == null ? 0 : v) + '"></i></span>'; }
 
   function render(r){
     var host = r.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -320,22 +320,23 @@
       }).join("");
       var bots = "";
       if (k === "p1"){
-        bots = '<li><span class="status st-na">Detail</span><div><h3>Crawler by crawler</h3><div class="table-wrap" style="margin-top:.6rem"><table class="t"><thead><tr><th scope="col">Crawler</th><th scope="col">Used for</th><th scope="col">Home page</th></tr></thead><tbody>' +
+        bots = '<li><span class="status st-na">Detail</span><div><h3>Crawler by crawler</h3><div class="table-wrap mt-s"><table class="t"><thead><tr><th scope="col">Crawler</th><th scope="col">Used for</th><th scope="col">Home page</th></tr></thead><tbody>' +
           r.checks.p1.botRows.map(function(b){ return "<tr><th scope=\"row\">" + b.ua + "</th><td>" + b.who + "</td><td>" + (b.allowed ? '<span class="yes">Allowed</span>' : '<span class="blk">Blocked</span>') + "</td></tr>"; }).join("") +
           "</tbody></table></div></div></li>";
       }
       return '<section class="pillar-block" id="' + k + '" aria-labelledby="' + k + '-h"><div class="pb-head"><h2 id="' + k + '-h">' + k.toUpperCase() + " " + NAMES[k] + '</h2><span class="pscore">' + r.scores[k] + ' <span class="small">/ 100</span></span></div><ul class="checks">' + list + bots + "</ul></section>";
     }).join("");
     out.innerHTML =
-      '<div class="summary"><div class="sum-score"><p class="small" style="margin:0">Quick check for</p><p class="site" style="margin:.1rem 0 0">' + esc(host) + '</p>' +
-      '<p class="big">' + r.overall + ' <small>/ 100</small></p><p class="bandname" style="margin:0">' + r.band + '</p>' +
-      '<div class="pointer-ramp"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin" style="left:0"></span></div>' +
+      '<div class="summary"><div class="sum-score"><p class="small m0">Quick check for</p><p class="site mt-xxs">' + esc(host) + '</p>' +
+      '<p class="big">' + r.overall + ' <small>/ 100</small></p><p class="bandname m0">' + r.band + '</p>' +
+      '<div class="pointer-ramp"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin"></span></div>' +
       '<div class="ramp-labels" aria-hidden="true"><span>0</span><span></span><span></span><span></span><span>100</span></div>' +
-      '<p class="small" style="margin:1rem 0 0">Average of the four pillars we can check automatically. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
+      '<p class="small mt-1 mb0">Average of the four pillars we can check automatically. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
       '<div class="sum-pillars">' + pins + "</div></div>" +
       '<div class="report-actions"><button class="btn secondary" type="button" id="copy-sum">Copy summary</button><button class="btn secondary" type="button" onclick="window.print()">Print or save as PDF</button><a class="btn ghost" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       '<div class="bc-block"><div><h2>P3 Brand Command needs the full test</h2><p>Whether ChatGPT, Gemini and Perplexity actually name you can’t be read from your website. The full rating asks AI assistants 19 customer questions, five times each, with web search on and off.</p></div><a class="btn" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       blocks;
+    Array.prototype.forEach.call(out.querySelectorAll("[data-w]"), function(i){ i.style.width = i.getAttribute("data-w") + "%"; });
     requestAnimationFrame(function(){ var pin = out.querySelector(".pin"); if (pin) pin.style.left = Math.max(1, Math.min(99, r.overall)) + "%"; });
     document.getElementById("copy-sum").addEventListener("click", function(e){
       var lines = ["Agentic Readiness quick check: " + host, "Score " + r.overall + "/100 (" + r.band + ")"];

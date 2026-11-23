@@ -119,8 +119,8 @@
   <a class="brand" href="/"><svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true"><rect x="0" y="0" width="12" height="5" rx="1.5" fill="#1D6A33"/><rect x="0" y="7.5" width="17" height="5" rx="1.5" fill="#4FB25A"/><rect x="0" y="15" width="24" height="5" rx="1.5" fill="#F2BE3A"/></svg><span>Agentic Readiness</span></a>
   <nav class="nav" id="site-nav" aria-label="Main"><a href="/how-it-works/">How it works</a><a href="/pillars/">Pillars</a><a href="/agentic-readiness-index/">Index</a><a href="/methodology/">Methodology</a><a href="/enterprise/">Enterprise</a><a href="/media/">Media</a></nav>
   <div class="head-actions">
-    <a class="btn ghost" href="/get-rated/">Get rated</a>
-    <a class="btn" href="/check/"><span class="long">Free check</span><span class="short">Check</span></a>
+    <a class="btn ghost" href="/check/">Free check</a>
+    <a class="btn" href="/get-rated/">Get rated</a>
     <button class="btn secondary menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
   </div>
 </div></header>
@@ -128,31 +128,27 @@
 <section class="hero"><div class="wrap">
   <div class="hero-copy">
     <h1 class="display">Measure your agentic readiness</h1>
-    <p class="lede">The Agentic Readiness Score is an independent measure of whether ChatGPT, Gemini, Perplexity and other AI assistants can find, understand, recommend and buy from a business. Check your website free, then get a full rating.</p>
-    <form class="checkbar" action="/check/" method="get" role="search" aria-label="Check a website">
-      <label class="vh" for="h-url">Your website address</label>
-      <input class="input" id="h-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" required>
-      <button class="btn" type="submit">Check my website <span class="arr" aria-hidden="true">→</span></button>
-    </form>
-    <p class="check-note">Free, about a minute, no sign-up. <a href="/check/#what-it-checks">What it checks</a></p>
+    <p class="lede">The Agentic Readiness Score is an independent measure of whether ChatGPT, Gemini, Perplexity and other AI assistants can find, understand, recommend and buy from a business. Get a full rating of how assistants describe and recommend you, with the method published in full.</p>
+    <p class="actions"><a class="btn lg" href="/get-rated/">Get the full rating <span class="arr" aria-hidden="true">→</span></a><a class="btn lg secondary" href="/enterprise/">For enterprise</a></p>
+    <p class="check-note">Not ready yet? <a href="/check/">Run the free website check</a> first.</p>
   </div>
-  <figure class="product" style="margin-bottom:0" aria-label="Example report for a sample business">
-    <div class="product-bar"><span>Quick check report · <strong>harbourline.example</strong></span><span class="note">Sample data</span></div>
+  <figure class="product" aria-label="Example report for a sample business">
+    <div class="product-bar"><span>Sample report · <strong>harbourline.example</strong></span><span class="note">Sample data</span></div>
     <div class="product-body">
       <div class="pr-score">
         <p class="lbl">Quick check score</p>
         <div class="big">56<small> / 100</small></div>
         <div class="bandname">Emerging</div>
-        <div class="ramp-pin" style="--at:56%"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin" aria-hidden="true"></span>
+        <div class="ramp-pin at-56"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin" aria-hidden="true"></span>
           <div class="ramp-labels" aria-hidden="true"><span>Invisible</span><span></span><span></span><span></span><span>Leading</span></div></div>
         <p class="src">23 automated checks of the home page, robots.txt, llms.txt and sitemap.</p>
       </div>
       <ul class="pr-pillars">
-        <li style="--i:0"><span class="nm">Technical Access<small>AI crawlers allowed, pages findable</small></span><span class="meter"><i style="width:82%"></i></span><span class="v">82</span></li>
-        <li style="--i:1"><span class="nm">Content Extractability<small>Readable without JavaScript</small></span><span class="meter"><i style="width:64%"></i></span><span class="v">64</span></li>
+        <li><span class="nm">Technical Access<small>AI crawlers allowed, pages findable</small></span><span class="meter"><i class="w-82"></i></span><span class="v">82</span></li>
+        <li><span class="nm">Content Extractability<small>Readable without JavaScript</small></span><span class="meter"><i class="w-64"></i></span><span class="v">64</span></li>
         <li class="na"><span class="nm">Brand Command<small>Measured by asking AI assistants</small></span><span class="meter"></span><span class="v">Full rating</span></li>
-        <li style="--i:2"><span class="nm">Data Liquidity<small>Structured data and offers</small></span><span class="meter"><i style="width:41%"></i></span><span class="v">41</span></li>
-        <li style="--i:3"><span class="nm">Transaction Readiness<small>Agents can enquire, book or buy</small></span><span class="meter"><i style="width:35%"></i></span><span class="v">35</span></li>
+        <li><span class="nm">Data Liquidity<small>Structured data and offers</small></span><span class="meter"><i class="w-41"></i></span><span class="v">41</span></li>
+        <li><span class="nm">Transaction Readiness<small>Agents can enquire, book or buy</small></span><span class="meter"><i class="w-35"></i></span><span class="v">35</span></li>
       </ul>
     </div>
   </figure>
@@ -163,11 +159,11 @@
   <div class="section-head"><h2 class="h2" id="pillars-h">The five pillars of agentic readiness</h2>
   <p class="lede">Every rating is built from five pillars. Four can be checked from your website in a minute. The fifth, Brand Command, is measured by asking AI assistants directly.</p></div>
   <ul class="pillar-cards">
-    <li><a href="/pillars/technical-access/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p1"/></svg><span class="h3">Technical Access</span><p>Whether AI crawlers and agents are allowed in, and can find every page.</p><span class="auto">In the free check</span></a></li>
-    <li><a href="/pillars/content-extractability/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p2"/></svg><span class="h3">Content Extractability</span><p>Whether your content can be read, quoted and summarised accurately.</p><span class="auto">In the free check</span></a></li>
+    <li><a href="/pillars/technical-access/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p1"/></svg><span class="h3">Technical Access</span><p>Whether AI crawlers and agents are allowed in, and can find every page.</p><span class="auto">Checked automatically</span></a></li>
+    <li><a href="/pillars/content-extractability/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p2"/></svg><span class="h3">Content Extractability</span><p>Whether your content can be read, quoted and summarised accurately.</p><span class="auto">Checked automatically</span></a></li>
     <li><a href="/pillars/brand-command/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p3"/></svg><span class="h3">Brand Command</span><p>How often AI assistants name you when customers ask, and how they describe you.</p><span class="auto full">Full rating only</span></a></li>
-    <li><a href="/pillars/data-liquidity/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p4"/></svg><span class="h3">Data Liquidity</span><p>Whether your products, prices, services and details are machine-readable.</p><span class="auto">In the free check</span></a></li>
-    <li><a href="/pillars/transaction-readiness/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p5"/></svg><span class="h3">Transaction Readiness</span><p>Whether an AI agent could enquire, book or buy on a customer’s behalf.</p><span class="auto">In the free check</span></a></li>
+    <li><a href="/pillars/data-liquidity/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p4"/></svg><span class="h3">Data Liquidity</span><p>Whether your products, prices, services and details are machine-readable.</p><span class="auto">Checked automatically</span></a></li>
+    <li><a href="/pillars/transaction-readiness/"><svg class="glyph" aria-hidden="true"><use href="/assets/icons.svg#p5"/></svg><span class="h3">Transaction Readiness</span><p>Whether an AI agent could enquire, book or buy on a customer’s behalf.</p><span class="auto">Checked automatically</span></a></li>
   </ul>
 </div></section>
 
@@ -186,23 +182,23 @@
 
 <section class="section" aria-labelledby="scale-h"><div class="wrap split">
   <div><h2 class="h2" id="scale-h">One score, five bands</h2>
-  <p class="lede" style="margin-top:1rem">Pillars are weighted for the type of business and combined into a score from 0 to 100. Every rating is dated and lists the assistants tested, so it can be cited.</p>
-  <p style="margin-top:1.5rem"><a class="link" href="/methodology/">Read the methodology</a></p></div>
+  <p class="lede mt-1">Pillars are weighted for the type of business and combined into a score from 0 to 100. Every rating is dated and lists the assistants tested, so it can be cited.</p>
+  <p class="mt-15"><a class="link" href="/methodology/">Read the methodology</a></p></div>
   <div class="table-wrap"><table class="t bandtable">
     <thead><tr><th scope="col">Band</th><th scope="col">Score</th><th scope="col">What it means</th></tr></thead>
     <tbody>
-      <tr><th scope="row"><span class="sw" style="background:var(--b5)"></span>Leading</th><td>80–100</td><td>A default recommendation in its category.</td></tr>
-      <tr><th scope="row"><span class="sw" style="background:var(--b4)"></span>Visible</th><td>60–79</td><td>Regularly named and described accurately.</td></tr>
-      <tr><th scope="row"><span class="sw" style="background:var(--b3)"></span>Emerging</th><td>40–59</td><td>Known, but often passed over.</td></tr>
-      <tr><th scope="row"><span class="sw" style="background:var(--b2)"></span>Low visibility</th><td>20–39</td><td>Occasionally named, rarely recommended.</td></tr>
-      <tr><th scope="row"><span class="sw" style="background:var(--b1)"></span>Invisible</th><td>0–19</td><td>AI assistants don’t know it exists.</td></tr>
+      <tr><th scope="row"><span class="sw bg-b5"></span>Leading</th><td>80–100</td><td>A default recommendation in its category.</td></tr>
+      <tr><th scope="row"><span class="sw bg-b4"></span>Visible</th><td>60–79</td><td>Regularly named and described accurately.</td></tr>
+      <tr><th scope="row"><span class="sw bg-b3"></span>Emerging</th><td>40–59</td><td>Known, but often passed over.</td></tr>
+      <tr><th scope="row"><span class="sw bg-b2"></span>Low visibility</th><td>20–39</td><td>Occasionally named, rarely recommended.</td></tr>
+      <tr><th scope="row"><span class="sw bg-b1"></span>Invisible</th><td>0–19</td><td>AI assistants don’t know it exists.</td></tr>
     </tbody></table></div>
 </div></section>
 
 <section class="section alt" aria-labelledby="compare-h"><div class="wrap split">
-  <div><h2 class="h2" id="compare-h">Free check or full rating?</h2>
-  <p class="lede" style="margin-top:1rem">The free check shows what’s stopping AI from reading and using your site. The full rating shows whether AI actually recommends you, and how you compare.</p>
-  <p style="margin-top:1.5rem;display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn" href="/check/">Check my website</a><a class="btn secondary" href="/get-rated/">Get the full rating</a></p></div>
+  <div><h2 class="h2" id="compare-h">What the full rating adds</h2>
+  <p class="lede mt-1">The full rating shows whether AI actually recommends you, and how you compare. A free website check covers the four pillars that can be read from your site.</p>
+  <p class="actions"><a class="btn" href="/get-rated/">Get the full rating</a><a class="btn secondary" href="/check/">Free website check</a></p></div>
   <div class="table-wrap"><table class="t">
     <thead><tr><th scope="col">Pillar</th><th scope="col">Free check</th><th scope="col">Full rating</th></tr></thead>
     <tbody>
@@ -235,11 +231,11 @@
   <div class="faq"><details><summary>What is agentic readiness?</summary><p>Agentic readiness is how prepared a business is for AI agents: assistants such as ChatGPT, Gemini and Perplexity that research, recommend and increasingly act on a customer’s behalf. A business with high agentic readiness can be reached by AI crawlers, is understood correctly, is named when customers ask for a recommendation, publishes machine-readable data, and can take an enquiry or order through an agent.</p></details><details><summary>What does the free check look at?</summary><p>It reads your home page, robots.txt, llms.txt and sitemap, and runs 23 checks across four pillars: Technical Access, Content Extractability, Data Liquidity and Transaction Readiness. It takes about a minute and needs no sign-up.</p></details><details><summary>Why isn’t Brand Command in the free check?</summary><p>Brand Command is whether AI assistants actually name you. That can’t be read from your website; it has to be measured by asking assistants customer questions, many times over. That’s what the full rating does.</p></details><details><summary>How is the full Agentic Readiness Score worked out?</summary><p>AI assistants are asked 19 customer questions across discovery, evaluation and transaction, five times each, with web search on and off. Those results are combined with the four website pillars, weighted for your type of business, into a score from 0 to 100.</p></details><details><summary>How is this different from SEO or GEO?</summary><p>SEO is about ranking in a list of search results; GEO and AEO are practices for improving how AI answers use your content. The Agentic Readiness Score is a measurement of where you stand, so you can tell whether that work is paying off.</p></details></div>
 </div></section>
 
-<section class="section"><div class="wrap"><div class="cta-band"><div><h2 class="h2">See where your business stands</h2><p>Run the free check now, then get the full rating when you’re ready.</p></div><a class="btn lg" href="/check/">Check my website <span class="arr" aria-hidden="true">→</span></a></div></div></section>
+<section class="section"><div class="wrap"><div class="cta-band"><div><h2 class="h2">See where your business stands</h2><p>Get a full rating of how AI assistants find, describe and recommend you.</p></div><a class="btn lg" href="/get-rated/">Get the full rating <span class="arr" aria-hidden="true">→</span></a></div></div></section>
 </main>
 <footer class="site-foot"><div class="wrap">
   <div class="foot-grid">
-    <div class="foot-brand"><a class="brand" href="/" style="color:#fff"><svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true"><rect x="0" y="0" width="12" height="5" fill="#5DBB63"/><rect x="0" y="7.5" width="17" height="5" fill="#C2D84A"/><rect x="0" y="15" width="24" height="5" fill="#F4C542"/></svg><span>Agentic Readiness</span></a>
+    <div class="foot-brand"><a class="brand" href="/"><svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true"><rect x="0" y="0" width="12" height="5" fill="#5DBB63"/><rect x="0" y="7.5" width="17" height="5" fill="#C2D84A"/><rect x="0" y="15" width="24" height="5" fill="#F4C542"/></svg><span>Agentic Readiness</span></a>
       <p>An independent measure of how AI assistants find, understand, recommend and transact with businesses. Published by The Optimisers.</p>
       <div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></div>
     <div><h2>Product</h2><ul><li><a href="/check/">Free readiness check</a></li><li><a href="/get-rated/">Get the full rating</a></li><li><a href="/how-it-works/">How it works</a></li><li><a href="/pillars/">The five pillars</a></li><li><a href="/enterprise/">Enterprise</a></li></ul></div>
