@@ -287,7 +287,9 @@
       transactional ? "" : "Describe what can be done on your site with potentialAction (for example ReserveAction or OrderAction).", 15));
 
     var scores = { p1: pillarScore(P.p1), p2: pillarScore(P.p2), p4: pillarScore(P.p4), p5: pillarScore(P.p5) };
-    var overall = Math.round((scores.p1 + scores.p2 + scores.p4 + scores.p5) / 4);
+    var W = CFG.quickWeights || { p1: 30, p2: 25, p4: 25, p5: 20 };
+    var wsum = W.p1 + W.p2 + W.p4 + W.p5;
+    var overall = Math.round((scores.p1 * W.p1 + scores.p2 * W.p2 + scores.p4 * W.p4 + scores.p5 * W.p5) / wsum);
     return { url: finalUrl, origin: origin, checks: P, scores: scores, overall: overall, band: band(overall), when: new Date() };
   }
 
@@ -331,7 +333,7 @@
       '<p class="big">' + r.overall + ' <small>/ 100</small></p><p class="bandname m0">' + r.band + '</p>' +
       '<div class="pointer-ramp"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin"></span></div>' +
       '<div class="ramp-labels" aria-hidden="true"><span>0</span><span></span><span></span><span></span><span>100</span></div>' +
-      '<p class="small mt-1 mb0">Average of the four pillars we can check automatically. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
+      '<p class="small mt-1 mb0">Weighted combination of the four pillars we can check automatically; Technical Access counts most. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
       '<div class="sum-pillars">' + pins + "</div></div>" +
       '<div class="report-actions"><button class="btn secondary" type="button" id="copy-sum">Copy summary</button><button class="btn secondary" type="button" onclick="window.print()">Print or save as PDF</button><a class="btn ghost" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       '<div class="bc-block"><div><h2>P3 Brand Command needs the full test</h2><p>Whether ChatGPT, Gemini and Perplexity actually name you can’t be read from your website. The full rating asks AI assistants 19 customer questions, five times each, with web search on and off.</p></div><a class="btn" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
