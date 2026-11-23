@@ -6,26 +6,57 @@
   "use strict";
   var CFG = window.ARS_CONFIG || {};
   var ENDPOINT = CFG.checkerEndpoint || "";              // your own Cloudflare Worker (recommended)
-  var FALLBACK = "https://api.allorigins.win/get?url="; // public fetch service, used if no endpoint is set
+  // Public fetch services, tried in order when no endpoint of your own is set.
+  // r.jina.ai (direct mode) returns the raw page plus its real HTTP status; allorigins is a last resort.
+  var JINA = "https://r.jina.ai/";
+  var ALLORIGINS = "https://api.allorigins.win/raw?url=";
   var TIMEOUT = 20000;
 
   /* ---------------- fetching ---------------- */
   function withTimeout(p, ms){
     return Promise.race([p, new Promise(function(_, rej){ setTimeout(function(){ rej(new Error("timeout")); }, ms); })]);
   }
+  function decodeEntities(t){ var d = document.createElement("textarea"); d.innerHTML = t; return d.value; }
+  // Jina returns plain-text files (robots.txt, llms.txt) wrapped in the browser's text viewer; unwrap them.
+  function unwrapText(html){
+    var m = /^\s*<html><head>(?:<meta[^>]*>)*<\/head><body><pre[^>]*>([\s\S]*)<\/pre><\/body><\/html>\s*$/i.exec(html || "");
+    return m ? { text: decodeEntities(m[1]), plain: true } : { text: html || "", plain: false };
+  }
+  function viaEndpoint(url){
+    return fetch(ENDPOINT + (ENDPOINT.indexOf("?") > -1 ? "&" : "?") + "url=" + encodeURIComponent(url))
+      .then(function(r){ return r.json(); })
+      .then(function(j){ return { ok: j.status >= 200 && j.status < 300, status: j.status || 0, url: j.url || url, type: j.contentType || "", text: j.body || "", robotsHeader: j.xRobotsTag || "" }; });
+  }
+  function viaJina(url){
+    return fetch(JINA + url, { headers: { "Accept": "application/json", "X-Return-Format": "html", "X-Engine": "direct", "X-No-Cache": "true" } })
+      .then(function(r){ return r.json().then(function(j){ return { r: r, j: j }; }); })
+      .then(function(o){
+        var j = o.j || {}, d = j.data;
+        if (!d){
+          var msg = j.readableMessage || j.message || "";
+          if (/resolve|ENOTFOUND|could not be resolved/i.test(msg)) return { ok:false, status:0, url:url, type:"", text:"", error:"dns" };
+          throw new Error("jina " + o.r.status);
+        }
+        var code = d.httpStatus || 0; if (!code) throw new Error("jina no status");
+        var u = unwrapText(d.html);
+        return { ok: code >= 200 && code < 300, status: code, url: d.finalUrl || d.url || url, type: u.plain ? "text/plain" : "", text: u.text, robotsHeader: "" };
+      });
+  }
+  function viaAllOrigins(url){
+    return fetch(ALLORIGINS + encodeURIComponent(url)).then(function(r){
+      return r.text().then(function(t){ return { ok: r.ok, status: r.status, url: url, type: r.headers.get("content-type") || "", text: t, robotsHeader: "" }; });
+    });
+  }
+  function attempt(fn, url){ return withTimeout(fn(url), TIMEOUT); }
   function fetchText(url){
-    var req;
-    if (ENDPOINT){
-      req = fetch(ENDPOINT + (ENDPOINT.indexOf("?") > -1 ? "&" : "?") + "url=" + encodeURIComponent(url))
-        .then(function(r){ return r.json(); })
-        .then(function(j){ return { ok: j.status >= 200 && j.status < 300, status: j.status || 0, url: j.url || url, type: j.contentType || "", text: j.body || "", robotsHeader: j.xRobotsTag || "" }; });
-    } else {
-      req = fetch(FALLBACK + encodeURIComponent(url))
-        .then(function(r){ if (!r.ok) throw new Error("proxy " + r.status); return r.json(); })
-        .then(function(j){ var s = j.status || {}; var code = s.http_code || 0;
-          return { ok: code >= 200 && code < 300, status: code, url: s.url || url, type: s.content_type || "", text: j.contents || "", robotsHeader: "" }; });
+    var chain = ENDPOINT ? [viaEndpoint, viaJina, viaAllOrigins] : [viaJina, viaAllOrigins];
+    var i = 0, lastErr = null;
+    function next(){
+      if (i >= chain.length) return Promise.resolve({ ok:false, status:0, url:url, type:"", text:"", error: lastErr ? (lastErr.message || String(lastErr)) : "unreachable" });
+      var fn = chain[i++];
+      return attempt(fn, url).catch(function(e){ lastErr = e; return next(); });
     }
-    return withTimeout(req, TIMEOUT).catch(function(e){ return { ok:false, status:0, url:url, type:"", text:"", error: e.message || String(e) }; });
+    return next();
   }
   function looksHtml(t){ return /^\s*(<!doctype|<html|<head|<body|<\?xml[^>]*>\s*<html)/i.test(t || ""); }
 
@@ -300,7 +331,7 @@
       '<p class="big">' + r.overall + ' <small>/ 100</small></p><p class="bandname" style="margin:0">' + r.band + '</p>' +
       '<div class="pointer-ramp"><div class="ramp" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="pin" style="left:0"></span></div>' +
       '<div class="ramp-labels" aria-hidden="true"><span>0</span><span></span><span></span><span></span><span>100</span></div>' +
-      '<p class="small" style="margin:1rem 0 0">Average of the four pillars we can check automatically. Checked ' + r.when.toLocaleString() + ".</p></div>" +
+      '<p class="small" style="margin:1rem 0 0">Average of the four pillars we can check automatically. Checked ' + r.when.toLocaleString(document.documentElement.lang === "en" ? undefined : document.documentElement.lang, { day:"numeric", month:"long", year:"numeric", hour:"numeric", minute:"2-digit" }) + ".</p></div>" +
       '<div class="sum-pillars">' + pins + "</div></div>" +
       '<div class="report-actions"><button class="btn secondary" type="button" id="copy-sum">Copy summary</button><button class="btn secondary" type="button" onclick="window.print()">Print or save as PDF</button><a class="btn ghost" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
       '<div class="bc-block"><div><h2>P3 Brand Command needs the full test</h2><p>Whether ChatGPT, Gemini and Perplexity actually name you can’t be read from your website. The full rating asks AI assistants 19 customer questions, five times each, with web search on and off.</p></div><a class="btn" href="/get-rated/?website=' + encodeURIComponent(host) + '">Get the full rating</a></div>' +
@@ -330,11 +361,31 @@
     Array.prototype.forEach.call(progress.children, function(li){ li.className = ""; });
     history.replaceState(null, "", "?url=" + encodeURIComponent(origin.replace(/^https:\/\//, "")));
     step(0, "run");
-    fetchText(origin + "/").then(function(home){
+    function loadHome(o){
+      return fetchText(o + "/").then(function(h){
+        // a bare domain that doesn't resolve often works with www.
+        if (!h.ok && !h.status && !/^https?:\/\/www\./i.test(o)){
+          var alt = o.replace(/^(https?:\/\/)/i, "$1www.");
+          return fetchText(alt + "/").then(function(h2){ if (h2.ok){ origin = alt; return h2; } return h; });
+        }
+        return h;
+      });
+    }
+    loadHome(origin).then(function(home){
+      if (home.ok && home.url){ try { var fu = new URL(home.url); if (fu.hostname) origin = fu.protocol + "//" + fu.hostname; } catch(e){} }
       if (!home.ok || !home.text){
         step(0, "bad");
-        var why = home.error === "timeout" ? "The site took too long to respond." : home.status ? "It returned status " + home.status + "." : "It couldn’t be reached, or it blocks automated requests.";
-        fail("We couldn’t load " + esc(origin.replace(/^https?:\/\//, "")), why + " Check the address and try again. Some sites block checks like this one; the full rating doesn’t depend on it.");
+        var host = esc(origin.replace(/^https?:\/\//, "")), why;
+        if (home.status === 401 || home.status === 403 || home.status === 429 || home.status === 503){
+          why = "It answered with status " + home.status + ", which means it turned away an automated visitor. That matters: AI assistants and agents fetch pages the same way, so they may be blocked too. Check your firewall or bot-protection settings (for example Cloudflare’s bot rules) and allow the AI crawlers you want.";
+          fail(host + " blocks automated visitors", why);
+        } else if (home.status){
+          fail("We couldn’t load " + host, "The home page returned status " + home.status + ". Check the address and try again.");
+        } else if (home.error === "dns"){
+          fail("We couldn’t find " + host, "That domain doesn’t resolve. Check the spelling and try again.");
+        } else {
+          fail("We couldn’t load " + host, (home.error === "timeout" ? "The site took too long to respond." : "The site couldn’t be reached, or our fetch service is busy.") + " Wait a moment and try again.");
+        }
         throw "stop";
       }
       step(0, "done"); step(1, "run");
