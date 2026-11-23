@@ -664,3 +664,17 @@ h1{font-weight:800}
 .foot-base{border-top-color:rgba(255,255,255,.15)}
 .nav a{white-space:nowrap}
 @media (max-width:640px){.brand .prod{display:none}.foot-grid{grid-template-columns:1fr}.menu-btn{padding-inline:.7rem}}
+/* 3D illustrations (assets/img, rendered from three.js models) */
+.hero-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:2rem 3rem;align-items:center}
+.hero-art{width:100%;height:auto;max-width:33rem;justify-self:end}
+.page-head.has-art .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,20rem);column-gap:3rem;align-items:center}
+.page-head.has-art .wrap>*{grid-column:1}
+.page-head.has-art .head-art{grid-column:2;grid-row:1/span 8;width:100%;height:auto}
+@media (max-width:900px){
+  .hero-top{grid-template-columns:1fr}
+  .hero-art{justify-self:center;max-width:18rem;margin-top:.5rem}
+  .page-head.has-art .wrap{grid-template-columns:1fr}
+  .page-head.has-art .head-art{grid-column:1;grid-row:auto;order:-1;max-width:13rem;margin:0 0 1rem}
+}
+.site-head .nav a[aria-current="page"]{background:transparent;color:var(--brand)}
+.site-head .menu-btn{color:#fff;background:transparent;border-color:rgba(255,255,255,.45)}.site-head .menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
